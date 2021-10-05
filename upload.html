@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>图片文件夹吧图库</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0">
+	</head>
+	<body>
+		<h1>图片文件夹吧图库——上传界面</h1>
+		<input type="text" placeholder="输入简介" id="intro" maxlength="100">
+		<br /><input type="file" accept="image/*" id="pic" onchange="upload();">
+		<p id="fin"></p>
+		<script>
+			function upload() {
+				if (document.getElementById("intro").value.length > 0) {
+					var file = document.getElementById("pic").files[0];
+					if (file) {
+						document.getElementById("fin").innerHTML = "上传中……";
+						var form = new FormData();
+						form.append("smfile", file);
+						form.append("format", "json");
+						var xhr = new XMLHttpRequest();
+						xhr.open("POST", "https://sm.ms/api/v2/upload");
+						xhr.send(form);
+						xhr.onreadystatechange = function() {
+							if (xhr.readyState == 4 && xhr.status == 200) {
+								console.log(xhr.responseText);
+								document.getElementById("fin").innerHTML = "上传完成";
+							} else {
+								document.getElementById("fin").innerHTML = "上传失败";
+							}
+						}
+					}
+				} else {
+					window.alert("还没有输入简介！");
+				}
+			}
+		</script>
+	</body>
+
+</html>
